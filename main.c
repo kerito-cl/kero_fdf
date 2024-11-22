@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <math.h>
 #include <stdbool.h>
 #include "MLX42/MLX42.h"
 #include "gnl/get_next_line.h"
-#define WIDTH 1256
-#define HEIGHT 1256
+#define WIDTH 256
+#define HEIGHT 256
 
 // Exit the program as failure.
 /**
@@ -18,6 +19,13 @@
  * @param height The height of the window.
  * @param delta_time The time difference between the previous frame and the current frame.
  */
+
+int	close_and_read(int fd, char *map)
+{
+	close(fd);
+    fd = open(map, O_RDONLY);
+	return (fd);
+}
 int	count_numbers(char *line)
 {
 	int i;
@@ -62,9 +70,9 @@ int	*build_row(char *line)
 	}
 	j = 0;
 	i = 0;
-	hold = 0;
 	while (line[i])
 	{
+	hold = 0;
 		if (line[i] == ' ')
 		{
 			row[j] = ft_atoi(line + hold);
@@ -94,11 +102,10 @@ int count_rows(int fd)
 		if (line != NULL && count_numbers(line) == 0)
 			return (0);
 	}
-	free(line);
 	return (count);
 }
 
-int **create_matrix(int fd)
+int **create_matrix(int fd, char *map)
 {	
 	int	**matrix;
 	char *line;
@@ -107,18 +114,15 @@ int **create_matrix(int fd)
 
 	i = 0;
 	count = count_rows(fd);
-	printf("%d\n", count);
 	matrix = (int **)malloc(sizeof(int *) * count);
-	line = get_next_line(fd);
-	printf("%s", line);
-    /*while (i < count)
+	fd = close_and_read(fd, map);
+    while (i < count)
     {
 		line = get_next_line(fd);
-		printf("%s", line);
 		matrix[i] = build_row(line);
 		free(line);
 		i++;
-    }*/
+    }
 	return (matrix);
 }
 
@@ -128,40 +132,46 @@ int32_t	main(int arg, char **args)
 	int j = 0;
 	int fd;
 	int	**matrix;
+	int	count;
 
     fd = open(args[1], O_RDONLY);
 	if (arg > 3)
 		return 0;
-	matrix = create_matrix(fd);
-
-	while (i < count_rows(fd))
+	matrix = create_matrix(fd, args[1]);
+	fd = close_and_read(fd, args[1]);
+	count = count_rows(fd);
+	while (i < count)
 	{
-		while (j < count_rows(fd))
+		j = 0;
+		while (j < count)
 		{
-			printf("%d", matrix[i][j]);
+			printf("%d ", matrix[i][j]);
 			j++;
 		}
+		free(matrix[i]);
+		printf("\n");
 		i++;
 	}
+	free(matrix);
 	
 	
-	/*mlx_set_setting(MLX_MAXIMIZED, true);
+	//mlx_set_setting(MLX_MAXIMIZED, true);
 	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "42Balls", true);
 	if (!mlx)
 		return 0;
 	// Create and display the image.
-	mlx_image_t* img = mlx_new_image(mlx, 1000, 1000);
-	if (!img || (mlx_image_to_window(mlx, img, 100, 100) < 0))
+	mlx_image_t* img = mlx_new_image(mlx, 256, 256);
+	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		return 0;
 	// Even after the image is being displayed, we can still modify the buffer.
-	while (i < 900)
+	while (i < 256)
 	{
-		mlx_put_pixel(img, i, 100, 0xFF0000FF);
+		mlx_put_pixel(img, i, 0, 0xFF0000FF);
 		i++;
 	}
 	// Register a hook and pass mlx as an optional param.
 	// NOTE: Do this before calling mlx_loop!
 	//mlx_loop_hook(mlx, ft_hook, mlx);
 	mlx_loop(mlx);
-	mlx_terminate(mlx);*/
+	mlx_terminate(mlx);
 }

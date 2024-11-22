@@ -164,10 +164,15 @@ int32_t	main(int arg, char **args)
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		return 0;
 	// Even after the image is being displayed, we can still modify the buffer.
-	while (i < 256)
+	i = 256 / 4;
+	j = 0;
+	int x = 256/2;
+	while (j < 10)
 	{
-		mlx_put_pixel(img, i, 0, 0xFF0000FF);
-		i++;
+		mlx_put_pixel(img, i , x, 0xFF0000FF);
+		j++;
+		i += 10;
+		x -= 10;
 	}
 	// Register a hook and pass mlx as an optional param.
 	// NOTE: Do this before calling mlx_loop!

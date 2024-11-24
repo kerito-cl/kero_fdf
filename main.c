@@ -27,6 +27,28 @@ void	line_algorithm(int *x1, int *y1, int x2, int y2, mlx_image_t* img)
 		else
 		{
 			pixel = pixel + (2 * dy) - (2 * dx);
+				*y1 = *y1 + 1;
+		}
+	}
+}
+void	neg_line_algorithm(int *x1, int *y1, int x2, int y2, mlx_image_t* img)
+{
+	int dx;
+	int dy;
+	int	pixel;
+
+	dx = x2 - *x1;
+	dy = y2 - *y1;
+	pixel = (2 * dy) - dx;
+	while (*x1 > x2)
+	{
+		mlx_put_pixel(img, *x1 , *y1, 0xFF0000FF);
+		*x1 = *x1 - 1;
+		if (pixel < 0)
+			pixel = pixel + (2 * dy);
+		else
+		{
+			pixel = pixel + (2 * dy) - (2 * dx);
 			*y1 = *y1 + 1;
 		}
 	}
@@ -42,9 +64,11 @@ int32_t	main(int arg, char **args)
 	int fd;
 	int	k;
 	int	a;
-	int	col_start_point;
+	int	csp;
 	int	rsp;
 	int	row_count;
+	int	tempx;
+	int tempy;
 
     gvals.x = 1980/2;
 	gvals.y = 0;
@@ -79,48 +103,17 @@ int32_t	main(int arg, char **args)
 		return 0;
 
 	row_count = 0;
-
-	gvals.j = 0;
-	while (gvals.j < nmb_count - 1)
-	{
-		k = 0;
-		col_start_point = gvals.i;
-		line_algorithm(&gvals.x, &gvals.y, gvals.x + 20 , gvals.y + 10, img);
-		/*while (k <= 20)
-		{
-			mlx_put_pixel(img, gvals.x + gvals.i , gvals.y + a , 0xFF0000FF);
-			mlx_put_pixel(img, gvals.x + col_start_point - k , gvals.y + a , 0xFF0000FF);
-			gvals.i++;;
-			k++;
-			mlx_put_pixel(img, gvals.x + col_start_point - k , gvals.y + a + , 0xFF0000FF);
-			mlx_put_pixel(img, gvals.x + gvals.i  , gvals.y + a , 0xFF0000FF);
-			gvals.i++;;
-			a++;
-			k++;
-		}*/
-		gvals.j++;
-	}
 	while (row_count < count - 1)
 	{
 		gvals.j = 0;
-		a = 0;
-		gvals.i = 0;
+		csp = gvals.x;
+		rsp = gvals.y;
 		while (gvals.j < nmb_count - 1)
 		{
-			k = 0;
-			col_start_point = gvals.i;
-			while (k <= 20)
-			{
-				mlx_put_pixel(img, gvals.x + gvals.i , gvals.y + a , 0xFF0000FF);
-				mlx_put_pixel(img, gvals.x + col_start_point - k , gvals.y + a , 0xFF0000FF);
-				gvals.i++;;
-				k++;
-				mlx_put_pixel(img, gvals.x + col_start_point - k , gvals.y + a , 0xFF0000FF);
-				mlx_put_pixel(img, gvals.x + gvals.i  , gvals.y + a , 0xFF0000FF);
-				gvals.i++;;
-				a++;
-				k++;
-			}
+			tempx = csp;
+			tempy = rsp;
+			neg_line_algorithm(&tempx, &tempy, csp - 20 , rsp + 10, img);
+			line_algorithm(&csp, &rsp, csp + 20 , rsp + 10, img);
 			gvals.j++;
 		}
 		gvals.x = gvals.x - 20;

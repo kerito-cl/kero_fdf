@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/23 13:41:07 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/24 12:25:21 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 #define WIDTH 1980
 #define HEIGHT 1020
 
+typedef struct s_greedval
+{
+	int	x;
+	int	y;
+    int z;
+	int	j;
+    int i;
+
+}		t_greedval;
 int	ft_isdigit(int i);
 int	close_and_read(int fd, char *map);
 int	count_numbers(char *line);

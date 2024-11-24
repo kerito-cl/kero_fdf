@@ -37,7 +37,7 @@ void	neg_line_algorithm(int *x1, int *y1, int x2, int y2, mlx_image_t* img)
 	int dy;
 	int	pixel;
 
-	dx = x2 - *x1;
+	dx = *x1 - x2;
 	dy = y2 - *y1;
 	pixel = (2 * dy) - dx;
 	while (*x1 > x2)

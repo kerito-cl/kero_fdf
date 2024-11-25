@@ -17,9 +17,9 @@ void isometric_projection(int i, int j, int z, int *iso_x, int *iso_y) {
 	double calc_y;
 	double height_scale;
 
-	height_scale = 3.0;
-    calc_x = roundf((j - i) * scale * cos(0.8));
-    calc_y = roundf(((i + j) * scale * sin(0.8)) - (z * height_scale));
+	height_scale = 4.0;
+    calc_x = roundf((j - i) * scale * cos(0.52));
+    calc_y = roundf(((i + j) * scale * sin(0.52)) - (z * height_scale));
 	*iso_x = calc_x;
 	*iso_y = calc_y;
 }
@@ -96,8 +96,9 @@ int32_t	main(int arg, char **args)
     int dest_x, dest_y;
     int dest2_x, dest2_y;
 
+	mlx_set_setting(MLX_MAXIMIZED, true);
     gvals.x = 1980/2;
-	gvals.y = 1020 / 4;
+	gvals.y = 1020/4;
 	gvals.i = 0;
     	fd = open(args[1], O_RDONLY);
 	if (arg > 3)

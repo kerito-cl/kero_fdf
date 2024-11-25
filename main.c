@@ -9,51 +9,78 @@
  * @param height The height of the window.
  * @param delta_time The time difference between the previous frame and the current frame.
  */
-void	line_algorithm(int *x1, int *y1, int x2, int y2, mlx_image_t* img)
+
+void isometric_projection(int i, int j, int z, int *iso_x, int *iso_y) {
+    // Calculate isometric x and y using the formulas
+	int	scale = 20;
+	double calc_x;
+	double calc_y;
+	double height_scale;
+
+	height_scale = 3.0;
+    calc_x = roundf((j - i) * scale * cos(0.8));
+    calc_y = roundf(((i + j) * scale * sin(0.8)) - (z * height_scale));
+	*iso_x = calc_x;
+	*iso_y = calc_y;
+}
+
+void	line_algorithm(int x1, int y1, int x2, int y2, mlx_image_t* img)
 {
 	int dx;
 	int dy;
 	int	pixel;
 
-	dx = x2 - *x1;
-	dy = y2 - *y1;
+	dx = abs(x2 - x1);
+	dy = (y2 - y1);
 	pixel = (2 * dy) - dx;
-	while (*x1 < x2)
+	while (x1 < x2 || x1 > x2)
 	{
-		mlx_put_pixel(img, *x1 , *y1, 0xFF0000FF);
-		*x1 = *x1 + 1;
+		mlx_put_pixel(img, x1 , y1, 0xFF0000FF);
+		if (x1 < x2)
+			x1 = x1 + 1;
+		else
+			x1 = x1 - 1;
 		if (pixel < 0)
 			pixel = pixel + (2 * dy);
 		else
 		{
 			pixel = pixel + (2 * dy) - (2 * dx);
-				*y1 = *y1 + 1;
+			if (y1 < y2)
+				y1 = y1 + 1;
+			else
+				y1 = y1 - 1;
 		}
 	}
 }
-void	neg_line_algorithm(int *x1, int *y1, int x2, int y2, mlx_image_t* img)
+
+void	line_slope_bigger(int x1, int y1, int x2, int y2, mlx_image_t* img)
 {
 	int dx;
 	int dy;
 	int	pixel;
 
-	dx = *x1 - x2;
-	dy = y2 - *y1;
-	pixel = (2 * dy) - dx;
-	while (*x1 > x2)
+	dx = abs(x2 - x1);
+	dy = abs(y2 - y1);
+	pixel = (2 * dx) - dy;
+	while (y1 < y2 || y1 > y2)
 	{
-		mlx_put_pixel(img, *x1 , *y1, 0xFF0000FF);
-		*x1 = *x1 - 1;
+		mlx_put_pixel(img, x1 , y1, 0xFF0000FF);
+		if (y1 < y2)
+			y1 = y1 + 1;
+		else
+			y1 = y1 - 1;
 		if (pixel < 0)
-			pixel = pixel + (2 * dy);
+			pixel = pixel + (2 * dx);
 		else
 		{
-			pixel = pixel + (2 * dy) - (2 * dx);
-			*y1 = *y1 + 1;
+			pixel = pixel + (2 * dx) - (2 * dy);
+			if (x1 < x2)
+				x1 = x1 + 1;
+			else
+				x1 = x1 - 1;
 		}
 	}
 }
-//void	vertical_draw()
 int32_t	main(int arg, char **args)
 {
 	t_greedval gvals;
@@ -62,40 +89,26 @@ int32_t	main(int arg, char **args)
 	int	nmb_count;
 	char *line;
 	int fd;
-	int	k;
-	int	a;
-	int	csp;
-	int	rsp;
 	int	row_count;
-	int	tempx;
-	int tempy;
+	int	dy;
+	int	dx;
+    int iso_x, iso_y;
+    int dest_x, dest_y;
+    int dest2_x, dest2_y;
 
     gvals.x = 1980/2;
-	gvals.y = 0;
+	gvals.y = 1020 / 4;
 	gvals.i = 0;
-    fd = open(args[1], O_RDONLY);
+    	fd = open(args[1], O_RDONLY);
 	if (arg > 3)
 		return 0;
 	matrix = create_matrix(fd, args[1]);
 	fd = close_and_read(fd, args[1]);
 	nmb_count = count_numbers(get_next_line(fd));
 	printf("NUM OF COL : %d \n", nmb_count);
-	count = count_rows(fd ) + 1;
+	count = count_rows(fd) + 1;
 	printf("NUM OF ROWS : %d \n", count);
-	while (gvals.i < count)
-	{
-		gvals.j = 0;
-		while (gvals.j < nmb_count)
-		{
-			printf("%d ", matrix[gvals.i][gvals.j]);
-			gvals.j++;
-		}
-		free(matrix[gvals.i]);
-		printf("\n");
-		gvals.i++;
-	}
-	free(matrix);
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "42Balls", true);
+	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
 	if (!mlx)
 		return 0;
 	mlx_image_t* img = mlx_new_image(mlx, 1980, 1020);
@@ -103,21 +116,35 @@ int32_t	main(int arg, char **args)
 		return 0;
 
 	row_count = 0;
-	while (row_count < count - 1)
+	while (row_count + 1 < count)
 	{
 		gvals.j = 0;
-		csp = gvals.x;
-		rsp = gvals.y;
-		while (gvals.j < nmb_count - 1)
+		while (gvals.j + 1 < nmb_count)
 		{
-			tempx = csp;
-			tempy = rsp;
-			neg_line_algorithm(&tempx, &tempy, csp - 20 , rsp + 10, img);
-			line_algorithm(&csp, &rsp, csp + 20 , rsp + 10, img);
+			gvals.z = matrix[row_count][gvals.j];
+            isometric_projection(row_count, gvals.j, gvals.z, &iso_x, &iso_y);
+            printf("Isometric Coordinates (x: %d, y: %d) with height %d\n",  iso_x, iso_y, gvals.z);
+			gvals.z = matrix[row_count][gvals.j + 1];
+            isometric_projection(row_count, gvals.j + 1, gvals.z, &dest_x, &dest_y);
+            printf("Destination Coordinates (x: %d, y: %d) with height %d\n",  dest_x, dest_y, gvals.z);
+			dx = abs(iso_x - dest_x);
+			dy = abs(iso_y - dest_y);
+			if (dx > dy)
+				line_algorithm(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest_x , gvals.y + dest_y, img);
+			else
+				line_slope_bigger(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest_x , gvals.y + dest_y, img);
+
+			gvals.z = matrix[row_count + 1][gvals.j];
+            isometric_projection(row_count + 1, gvals.j, gvals.z, &dest2_x, &dest2_y);
+            printf("Second Destination Coordinates (x: %d, y: %d) with height %d\n",  dest2_x, dest2_y, gvals.z);
+			dx = abs(iso_x - dest2_x);
+			dy = abs(iso_y - dest2_y);
+			if (dx > dy)
+				line_algorithm(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest2_x , gvals.y + dest2_y, img);
+			else
+				line_slope_bigger(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest2_x , gvals.y + dest2_y, img);
 			gvals.j++;
 		}
-		gvals.x = gvals.x - 20;
-		gvals.y = gvals.y + 10;
 		row_count++;
 	}
 	// Register a hook and pass mlx as an optional param.

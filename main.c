@@ -10,18 +10,49 @@
  * @param delta_time The time difference between the previous frame and the current frame.
  */
 
-void isometric_projection(int i, int j, int z, int *iso_x, int *iso_y) {
+void isometric_projection1(int i, int j, int z, t_coord *coord) {
     // Calculate isometric x and y using the formulas
-	int	scale = 20;
+	int	scale;
 	double calc_x;
 	double calc_y;
 	double height_scale;
 
-	height_scale = 4.0;
-    calc_x = roundf((j - i) * scale * cos(0.52));
-    calc_y = roundf(((i + j) * scale * sin(0.52)) - (z * height_scale));
-	*iso_x = calc_x;
-	*iso_y = calc_y;
+	scale = 60;
+	height_scale = 10;
+    calc_x = roundf((j - i) * scale * cos(0.72));
+    calc_y = roundf(((i + j) * (scale/2) * sin(0.72)) - (z * height_scale));
+	coord->iso_x = calc_x;
+	coord->iso_y = calc_y;
+}
+
+void isometric_projection2(int i, int j, int z, t_coord *coord) {
+    // Calculate isometric x and y using the formulas
+	int	scale;
+	double calc_x;
+	double calc_y;
+	double height_scale;
+
+	scale = 60;
+	height_scale = 10;
+    calc_x = roundf((j - i) * scale * cos(0.72));
+    calc_y = roundf(((i + j) * (scale/2) * sin(0.72)) - (z * height_scale));
+	coord->dest_x = calc_x;
+	coord->dest_y = calc_y;
+}
+
+void isometric_projection3(int i, int j, int z, t_coord *coord) {
+    // Calculate isometric x and y using the formulas
+	int	scale;
+	double calc_x;
+	double calc_y;
+	double height_scale;
+
+	scale = 60;
+	height_scale = 10;
+    calc_x = roundf((j - i) * scale * cos(0.72));
+    calc_y = roundf(((i + j) * (scale/2) * sin(0.72)) - (z * height_scale));
+	coord->dest2_x = calc_x;
+	coord->dest2_y = calc_y;
 }
 
 void	line_algorithm(int x1, int y1, int x2, int y2, mlx_image_t* img)
@@ -81,26 +112,71 @@ void	line_slope_bigger(int x1, int y1, int x2, int y2, mlx_image_t* img)
 		}
 	}
 }
+
+/*void calcul_coord(t_gridval *gvals, t_coord *coord, int **matrix)
+{
+
+	gvals->z = matrix[gvals->row_count][gvals->j];
+	isometric_projection1(gvals->row_count, gvals->j, gvals->z, coord);
+	gvals->z = gvals->matrix[gvals->row_count][gvals->j + 1];
+	isometric_projection2(gvals->row_count, gvals->j + 1, gvals->z, coord);
+	coord->dx = abs(coord->iso_x - coord->dest_x);
+	coord->dy = abs(coord->iso_y - coord->dest_y);
+}*/
+void draw_map(mlx_image_t *img, int count, int nmb_count, int **matrix)
+{
+	t_gridval gvals;
+	t_coord coord;
+
+    gvals.x = 2560/2;
+	gvals.y = 1440/2;
+	gvals.row_count = 0;
+	while (gvals.row_count + 1 < count)
+	{
+		gvals.j = 0;
+		while (gvals.j + 1 < nmb_count)
+		{
+			gvals.z = matrix[gvals.row_count][gvals.j];
+            isometric_projection1(gvals.row_count, gvals.j, gvals.z, &coord);
+			gvals.z = matrix[gvals.row_count][gvals.j + 1];
+            isometric_projection2(gvals.row_count, gvals.j + 1, gvals.z, &coord);
+			coord.dx = abs(coord.iso_x - coord.dest_x);
+			coord.dy = abs(coord.iso_y - coord.dest_y);
+			//calcul_coord(&gvals, &coord, matrix);
+			if (coord.dx > coord.dy)
+				line_algorithm(gvals.x + coord.iso_x, gvals.y + coord.iso_y, gvals.x + coord.dest_x , gvals.y + coord.dest_y, img);
+			else
+				line_slope_bigger(gvals.x + coord.iso_x, gvals.y + coord.iso_y, gvals.x + coord.dest_x , gvals.y + coord.dest_y, img);
+			gvals.z = matrix[gvals.row_count + 1][gvals.j];
+            isometric_projection3(gvals.row_count + 1, gvals.j, gvals.z, &coord);
+			coord.dx = abs(coord.iso_x - coord.dest2_x);
+			coord.dy = abs(coord.iso_y - coord.dest2_y);
+			if (coord.dx > coord.dy)
+				line_algorithm(gvals.x + coord.iso_x, gvals.y + coord.iso_y, gvals.x + coord.dest2_x , gvals.y + coord.dest2_y, img);
+			else
+				line_slope_bigger(gvals.x + coord.iso_x, gvals.y + coord.iso_y, gvals.x + coord.dest2_x , gvals.y + coord.dest2_y, img);
+			gvals.j++;
+		}
+		gvals.row_count++;
+	}
+}
 int32_t	main(int arg, char **args)
 {
-	t_greedval gvals;
-	int	**matrix;
 	int	count;
-	int	nmb_count;
-	char *line;
+	int nmb_count;
 	int fd;
-	int	row_count;
-	int	dy;
-	int	dx;
-    int iso_x, iso_y;
-    int dest_x, dest_y;
-    int dest2_x, dest2_y;
+	int **matrix;
+	mlx_t* mlx;
+	mlx_image_t* img;
 
+	mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
+	img = mlx_new_image(mlx, 4096, 2160);
+	if (!mlx)
+		return 0;
+	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
+		return 0;
 	mlx_set_setting(MLX_MAXIMIZED, true);
-    gvals.x = 1980/2;
-	gvals.y = 1020/4;
-	gvals.i = 0;
-    	fd = open(args[1], O_RDONLY);
+    fd = open(args[1], O_RDONLY);
 	if (arg > 3)
 		return 0;
 	matrix = create_matrix(fd, args[1]);
@@ -109,45 +185,7 @@ int32_t	main(int arg, char **args)
 	printf("NUM OF COL : %d \n", nmb_count);
 	count = count_rows(fd) + 1;
 	printf("NUM OF ROWS : %d \n", count);
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
-	if (!mlx)
-		return 0;
-	mlx_image_t* img = mlx_new_image(mlx, 1980, 1020);
-	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
-		return 0;
-
-	row_count = 0;
-	while (row_count + 1 < count)
-	{
-		gvals.j = 0;
-		while (gvals.j + 1 < nmb_count)
-		{
-			gvals.z = matrix[row_count][gvals.j];
-            isometric_projection(row_count, gvals.j, gvals.z, &iso_x, &iso_y);
-            printf("Isometric Coordinates (x: %d, y: %d) with height %d\n",  iso_x, iso_y, gvals.z);
-			gvals.z = matrix[row_count][gvals.j + 1];
-            isometric_projection(row_count, gvals.j + 1, gvals.z, &dest_x, &dest_y);
-            printf("Destination Coordinates (x: %d, y: %d) with height %d\n",  dest_x, dest_y, gvals.z);
-			dx = abs(iso_x - dest_x);
-			dy = abs(iso_y - dest_y);
-			if (dx > dy)
-				line_algorithm(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest_x , gvals.y + dest_y, img);
-			else
-				line_slope_bigger(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest_x , gvals.y + dest_y, img);
-
-			gvals.z = matrix[row_count + 1][gvals.j];
-            isometric_projection(row_count + 1, gvals.j, gvals.z, &dest2_x, &dest2_y);
-            printf("Second Destination Coordinates (x: %d, y: %d) with height %d\n",  dest2_x, dest2_y, gvals.z);
-			dx = abs(iso_x - dest2_x);
-			dy = abs(iso_y - dest2_y);
-			if (dx > dy)
-				line_algorithm(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest2_x , gvals.y + dest2_y, img);
-			else
-				line_slope_bigger(gvals.x + iso_x, gvals.y + iso_y, gvals.x + dest2_x , gvals.y + dest2_y, img);
-			gvals.j++;
-		}
-		row_count++;
-	}
+	draw_map(img, count, nmb_count, matrix);
 	// Register a hook and pass mlx as an optional param.
 	// NOTE: Do this before calling mlx_loop!
 	//mlx_loop_hook(mlx, ft_hook, mlx);

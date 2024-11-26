@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/24 12:25:21 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/26 10:30:20 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,34 @@
 #define WIDTH 1980
 #define HEIGHT 1020
 
-typedef struct s_greedval
+typedef struct s_gridval
 {
+	int **matrix;
+	int row_count;
+	int nmb_count;
 	int	x;
 	int	y;
     int z;
 	int	j;
     int i;
 
-}		t_greedval;
+}		t_gridval;
+
+typedef struct s_coord
+{
+	int	dx;
+	int	dy;
+    int iso_x;
+	int	iso_y;
+    int dest_x;
+	int	dest_y;
+    int dest2_x;
+	int	dest2_y;
+}		t_coord;
+
+void isometric_projection(int row_count, int j, int z, int *iso_x, int *iso_y);
+void	line_algorithm(int x1, int y1, int x2, int y2, mlx_image_t* img);
+void	line_slope_bigger(int x1, int y1, int x2, int y2, mlx_image_t* img);
 int	ft_isdigit(int i);
 int	close_and_read(int fd, char *map);
 int	count_numbers(char *line);

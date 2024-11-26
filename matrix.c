@@ -6,51 +6,33 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/25 22:01:02 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/26 22:08:17 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-
-int	close_and_read(int fd, char *map)
-{
-	close(fd);
-    fd = open(map, O_RDONLY);
-	return (fd);
-}
 int	count_numbers(char *line)
 {
 	int i;
 	int	count;
+	char **split;
 
-	i = 0;
 	count = 0;
-	if (line[i] < '0' || line[i] > '9')
-		return (0);
-	while (line[i])
-	{
-		while ((line[i] >= '0' && line[i] <= '9') || line[i] == ' ')
-		{
-			i++;
-			if (line[i] == ' ' && ft_isdigit(line[i + 1]) == 1)
-				count++;
-		}
-		if (line[i] != '\n')
-			return (0);
+	split = ft_split(line, ' ');
+	while (split[count])
 		count++;
-		i++;
-	}
+	freesplit(split);
 	return	(count);
 }
-// Print the window width and height.
+
 int	*build_row(char *line)
 {
     int	i;
 	int	j;
 	int	*row;
 	int	count;
-	int	hold;
+	char **split;
 
 	count = count_numbers(line);
 	row = (int *)malloc(count * sizeof(int));
@@ -59,21 +41,17 @@ int	*build_row(char *line)
 		free(row);
 		return (NULL);
 	}
+	split = ft_split(line, ' ');
 	j = 0;
 	i = 0;
-	hold = 0;
-	while (line[i])
+	while (split[i])
 	{
-		if (line[i] == ' ' && ft_isdigit(line[i + 1]) == 1)
-		{
-			row[j] = ft_atoi(line + hold);
-			hold = i + 1;
-			j++;
-		}
+		row[j] = ft_atoi(split[i]);
+		j++;
 		i++;
 	}
-	row[j] = ft_atoi(line + hold);
 	return (row);
+	freesplit(split);
 }
 
 int count_rows(int fd)

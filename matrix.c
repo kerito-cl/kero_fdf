@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/26 22:08:17 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/28 09:56:58 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	*build_row(char *line)
 		j++;
 		i++;
 	}
-	return (row);
 	freesplit(split);
+	return (row);
 }
 
 int count_rows(int fd)

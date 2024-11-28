@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 09:31:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/26 22:11:09 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/27 09:18:49 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	line_algorithm(t_coord coord, int x2, int y2, mlx_image_t* img)
 	pixel = (2 * coord.dy) - coord.dx;
 	while (coord.iso_x < x2 || coord.iso_x > x2)
 	{
-		mlx_put_pixel(img, coord.iso_x , coord.iso_y, 0xFF0000FF+coord.dx);
+		mlx_put_pixel(img, coord.iso_x , coord.iso_y, coord.color);
 		if (coord.iso_x < x2)
 			coord.iso_x = coord.iso_x + 1;
 		else
@@ -94,7 +94,7 @@ void	line_slope_bigger(t_coord coord, int x2, int y2, mlx_image_t* img)
 	pixel = (2 * coord.dx) - coord.dy;
 	while (coord.iso_y < y2 || coord.iso_y > y2)
 	{
-		mlx_put_pixel(img, coord.iso_x , coord.iso_y, 0xFF0000FF);
+		mlx_put_pixel(img, coord.iso_x , coord.iso_y, coord.color);
 		if (coord.iso_y < y2)
 			coord.iso_y = coord.iso_y + 1;
 		else

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/26 22:07:01 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:34:01 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 #define WIDTH 1980
 #define HEIGHT 1020
-#define SCALE 4
-#define HEIGHT_SCALE 2
+#define SCALE 20
+#define HEIGHT_SCALE 10
 #define ANGLE 0.523599
 
 typedef struct s_gridval
@@ -49,7 +49,12 @@ typedef struct s_coord
 	int	dest_y;
     int dest2_x;
 	int	dest2_y;
-	int	color;
+	int	hold_height;
+	unsigned int	r;
+	unsigned int	b;
+	unsigned int	g;
+	unsigned int	a;
+	unsigned int	color;
 }		t_coord;
 
 void draw_map(mlx_image_t *img, int count, int nmb_count, int **matrix);

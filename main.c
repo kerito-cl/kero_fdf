@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/26 21:13:01 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:52:46 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int32_t	main(int arg, char **args)
 	int	count;
 	int nmb_count;
 	int fd;
-	int **matrix;
+	t_matrix m;
 	mlx_t* mlx;
 	mlx_image_t* img;
 
@@ -53,18 +53,26 @@ int32_t	main(int arg, char **args)
 		return 0;
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		return 0;
-	mlx_set_setting(MLX_MAXIMIZED, true);
+	//mlx_set_setting(MLX_MAXIMIZED, true);
     fd = open(args[1], O_RDONLY);
-	matrix = create_matrix(fd, args[1]);
+	m.numbers = create_matrix(fd, args[1]);
+	fd = close_and_read(fd, args[1]);
+	m.colors = color_matrix(fd, args[1]);
 	fd = close_and_read(fd, args[1]);
 	nmb_count = count_numbers(get_next_line(fd));
 	printf("NUM OF COL : %d \n", nmb_count);
 	count = count_rows(fd) + 1;
 	printf("NUM OF ROWS : %d \n", count);
-	draw_map(img, count, nmb_count, matrix);
+	putcolors(&m,count, nmb_count);
+
+	draw_map(img, count, nmb_count, m);
+
+
 
 	mlx_key_hook(mlx, &my_keyhook, NULL);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
+	freecolors(m.colors, count);
+	freematrix(m.numbers, count);
 	close(fd);
 }

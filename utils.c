@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 13:40:49 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/26 21:20:25 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/30 14:13:29 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_isdigit(int i)
 int	close_and_read(int fd, char *map)
 {
 	close(fd);
-    fd = open(map, O_RDONLY);
+	fd = open(map, O_RDONLY);
 	return (fd);
 }
 
@@ -42,4 +42,29 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	}
 	dst[i] = '\0';
 	return (len);
+}
+
+void	freematrix(int **m, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		free(m[i]);
+		i++;
+	}
+	free(m);
+}
+void	freecolors(unsigned int **m, int count)
+{
+	int i;
+
+	i = 0;
+	while (i < count)
+	{
+		free(m[i]);
+		i++;
+	}
+	free(m);
 }

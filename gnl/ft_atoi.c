@@ -6,12 +6,29 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:48:36 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/05 14:58:56 by mquero           ###   ########.fr       */
+/*   Updated: 2024/11/29 10:50:17 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int	hexa(const char *str, int *i, int hold)
+{
+	*i = *i + 2;
+	while ((str[*i] >= '0' && str[*i] <= '9') ||
+		   (str[*i] >= 'a' && str[*i] <= 'f') ||
+		   (str[*i] >= 'A' && str[*i] <= 'F'))
+	{
+		if (str[*i] >= '0' && str[*i] <= '9')
+			hold = hold * 16 + (str[*i] - '0');
+		else if (str[*i] >= 'a' && str[*i] <= 'f')
+			hold = hold * 16 + (str[*i] - 'a' + 10);
+		else if (str[*i] >= 'A' && str[*i] <= 'F')
+			hold = hold * 16 + (str[*i] - 'A' + 10);
+		*i = *i + 1;
+	}
+	return (hold);
+}
 int	ft_atoi(const char *str)
 {
 	int		i;
@@ -28,14 +45,15 @@ int	ft_atoi(const char *str)
 		if (str[i++] == '-')
 			n = -1;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	if (str[i] == '0' && (str[i + 1] == 'x' || str[i + 1] == 'X'))
+		hold = hexa(str, &i, hold);
+	else
 	{
-		hold = (hold * 10) + (str[i] - '0');
-		if (hold < 0 && n == 1)
-			return (-1);
-		else if (hold < 0 && n == -1)
-			return (0);
-		i++;
+		while (str[i] >= '0' && str[i] <= '9')
+		{
+			hold = (hold * 10) + (str[i] - '0');
+			i++;
+		}
 	}
 	return ((int)(hold * n));
 }

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 14:40:18 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/01 22:23:09 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,6 @@
 # define HEIGHT 1080
 # define ANGLE 0.523599
 
-typedef struct s_gridval
-{
-	int				row_count;
-	int				nmb_count;
-	int				j;
-	int				i;
-}					t_gridval;
 
 typedef struct s_matrix
 {
@@ -54,8 +47,10 @@ typedef struct s_coord
 	double			alpha;
 	double			tetha;
 	double			gamma;
-	int				scale;
-	int				height_scale;
+	double				scale;
+	double			height_scale;
+	int				width;
+	int				height;
 	int				z;
 	int				dx;
 	int				dy;
@@ -73,15 +68,19 @@ typedef struct s_coord
 	unsigned int	g2;
 	unsigned int	a;
 	unsigned int	final_color;
+	int				row_count;
+	int				nmb_count;
+	int				j;
+	int				x_offset;
+	int				y_offset;
 }					t_coord;
 
 void				draw_map(void *param);
 void				isometric_projection1(int i, int j, int z, t_coord *coord);
 void				isometric_projection2(int i, int j, int z, t_coord *coord);
 void				isometric_projection3(int i, int j, int z, t_coord *coord);
-void				isometric(int *x, int *y, t_gridval *gvals, t_coord *coord);
-void				calcul_coord(t_gridval *gvals, t_coord *coord);
-void				calcul_coord_dest(t_gridval *gvals, t_coord *coord);
+void				calcul_coord(t_coord *coord);
+void				calcul_coord_dest(t_coord *coord);
 void				line_algorithm(t_coord coord, int x2, int y2,
 						mlx_image_t *img);
 void				line_slope_bigger(t_coord coord, int x2, int y2,

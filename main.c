@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/30 13:52:46 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/01 14:33:06 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,57 +22,61 @@
  * @param delta_time The time difference between the previous frame and the current frame.
  */
 
-void my_keyhook(mlx_key_data_t keydata, void* param)
+void manage_map(void* param)
 {
+	t_coord *coord = (t_coord*)param;
 	// If we PRESS the 'J' key, print "Hello".
-	if (keydata.key == MLX_KEY_J && keydata.action == MLX_REPEAT)
-		;
-
-	// If we RELEASE the 'K' key, print "World".
-	if (keydata.key == MLX_KEY_K && keydata.action == MLX_REPEAT)
-		puts("World");
-
-	// If we HOLD the 'L' key, print "!".
-	if (keydata.key == MLX_KEY_L && keydata.action == MLX_REPEAT)
-		puts("!");
+	if (mlx_is_key_down(coord->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(coord->mlx);
+	if (mlx_is_key_down(coord->mlx, MLX_KEY_L))
+	{
+		coord->scale = coord->scale - 0.1;
+		coord->height_scale = coord->scale - 0.1;
+	}
 }
+
+void	start(char *map,t_coord *coord)
+{
+	char *line;
+	int	fd;
+
+    fd = open(map, O_RDONLY);
+	coord->numbers = create_matrix(fd, map);
+	fd = close_and_read(fd, map);
+	coord->colors = color_matrix(fd, map);
+	fd = close_and_read(fd, map);
+	line = get_next_line(fd);
+	coord->total_cols = count_numbers(line);
+	coord->total_rows = count_rows(fd) + 1;
+	putcolors(coord);
+	coord->scale = 20;
+	coord->height_scale = 20;
+	coord->a = 255;
+	draw_map(coord);
+	free(line);
+	close(fd);
+}
+
 int32_t	main(int arg, char **args)
 {
-	int	count;
-	int nmb_count;
-	int fd;
-	t_matrix m;
-	mlx_t* mlx;
-	mlx_image_t* img;
+	t_coord coord;
+	//mlx_t* mlx;
+	//mlx_image_t* img;
 
 	if (arg > 2)
 		return 0;
-	mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
-	img = mlx_new_image(mlx, 4096, 2160);
-	if (!mlx)
+	coord.mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
+	coord.img = mlx_new_image(coord.mlx, 4096, 2160);
+	if (!coord.mlx)
 		return 0;
-	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
+	if (!coord.img || (mlx_image_to_window(coord.mlx,coord.img, 0, 0) < 0))
 		return 0;
+	start(args[1], &coord);
 	//mlx_set_setting(MLX_MAXIMIZED, true);
-    fd = open(args[1], O_RDONLY);
-	m.numbers = create_matrix(fd, args[1]);
-	fd = close_and_read(fd, args[1]);
-	m.colors = color_matrix(fd, args[1]);
-	fd = close_and_read(fd, args[1]);
-	nmb_count = count_numbers(get_next_line(fd));
-	printf("NUM OF COL : %d \n", nmb_count);
-	count = count_rows(fd) + 1;
-	printf("NUM OF ROWS : %d \n", count);
-	putcolors(&m,count, nmb_count);
-
-	draw_map(img, count, nmb_count, m);
-
-
-
-	mlx_key_hook(mlx, &my_keyhook, NULL);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
-	freecolors(m.colors, count);
-	freematrix(m.numbers, count);
-	close(fd);
+	mlx_loop_hook(coord.mlx, &manage_map, &coord);
+	mlx_loop_hook(coord.mlx, &draw_map, &coord);
+	mlx_loop(coord.mlx);
+	mlx_terminate(coord.mlx);
+	freecolors(coord.colors, coord.total_rows);
+	freematrix(coord.numbers, coord.total_rows);
 }

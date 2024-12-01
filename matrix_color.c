@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/30 14:06:18 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/01 14:20:32 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ unsigned int **color_matrix(int fd, char *map)
 	return (matrix);
 }
 
-void	putcolors(t_matrix *m, int count, int count_n)
+void	putcolors(t_coord *m)
 {
 	int	i;
 	int	j;
@@ -70,14 +70,13 @@ void	putcolors(t_matrix *m, int count, int count_n)
 
 	color = 0x009999;
 	i = 0;
-	while (i < count)
+	while (i < m->total_rows)
 	{
 		j = 0;
-		while (j < count_n)
+		while (j < m->total_cols)
 		{
-
 			if (m->numbers[i][j] < 0 && m->colors[i][j] == color)
-				m->colors[i][j] = color - (20 * m->numbers[i][j]);
+				m->colors[i][j] = color - (10 * m->numbers[i][j]);
 			else if (m->numbers[i][j] > 0 && m->colors[i][j] == color)
 				m->colors[i][j] = color * (20 * m->numbers[i][j]);
 			j++;

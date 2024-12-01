@@ -6,38 +6,36 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 09:31:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/30 13:11:36 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/01 12:30:23 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-/*void	rotate_z(t_coord *coord)
+void	rotate_z(int *x, int *y, t_coord *coord)
 {
 	int	tmp;
 
-	tmp = coord->iso_x;
-	coord->iso_x = tmp * cos(coord->gamma) - coord->iso_y * sin(coord->gamma);
-	coord->iso_y = tmp * sin(coord->gamma) + coord->iso_y * cos(coord->gamma);
+	tmp = *x;
+	*x = tmp * cos(coord->gamma) - *y * sin(coord->gamma);
+	*y = tmp * sin(coord->gamma) + *y * cos(coord->gamma);
 }
-
-void	rotate_y(t_coord *coord)
+void	rotate_y(int *x, int *z, t_coord *coord)
 {
 	int	tmp;
 
-	tmp = coord->x;
-	coord->x = tmp * cos(coord->tetha) + coord->z * sin(coord->tetha);
-	coord->z = coord->z * cos(coord->tetha) - tmp * sin(coord->tetha);
+	tmp = *x;
+	*x = tmp * cos(coord->tetha) + *z * sin(coord->tetha);
+	*z = *z * cos(coord->tetha) - tmp * sin(coord->tetha);
 }
-
-void	rotate_x(t_coord *coord)
+void	rotate_x(int *y, int *z, t_coord *coord)
 {
 	int	tmp;
 
-	tmp = coord->y;
-	coord->y = tmp * cos(coord->alpha) - coord->z * sin(coord->alpha);
-	coord->z = tmp * sin(coord->alpha) + coord->z * cos(coord->alpha);
-}*/
+	tmp = *y;
+	*y = tmp * cos(coord->alpha) - *z * sin(coord->alpha);
+	*z = tmp * sin(coord->alpha) + *z * cos(coord->alpha);
+}
 
 void	isometric_projection1(int i, int j, int z, t_coord *coord)
 {
@@ -46,8 +44,8 @@ void	isometric_projection1(int i, int j, int z, t_coord *coord)
 	double	calc_y;
 	double	height_scale;
 
-	scale = SCALE;
-	height_scale = HEIGHT_SCALE;
+	scale = coord->scale;
+	height_scale = coord->height_scale;
 	calc_x = roundf(((j - i) * scale * cos(ANGLE)));
 	calc_y = roundf((((i + j) * scale * sin(ANGLE))) - (coord->z * height_scale
 				* sin(ANGLE)));
@@ -62,8 +60,8 @@ void	isometric_projection2(int i, int j, int z, t_coord *coord)
 	double	calc_y;
 	double	height_scale;
 
-	scale = SCALE;
-	height_scale = HEIGHT_SCALE;
+	scale = coord->scale;
+	height_scale = coord->height_scale;
 	calc_x = roundf((j - i) * scale * cos(ANGLE));
 	calc_y = roundf(((i + j) * (scale)*sin(ANGLE)) - (coord->z * height_scale
 				* sin(ANGLE)));
@@ -78,8 +76,8 @@ void	isometric_projection3(int i, int j, int z, t_coord *coord)
 	double	calc_y;
 	double	height_scale;
 
-	scale = SCALE;
-	height_scale = HEIGHT_SCALE;
+	scale = coord->scale;
+	height_scale = coord->height_scale;
 	calc_x = roundf((j - i) * scale * cos(ANGLE));
 	calc_y = roundf(((i + j) * scale * sin(ANGLE)) - (coord->z * height_scale
 				* sin(ANGLE)));

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:43:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 13:37:27 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:47:37 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	redraw_map(mlx_image_t *img)
 		i++;
 	}
 }
+
 void	calcul_coord(t_coord *c)
 {
 	c->z = c->numbers[c->row_count][c->j];
@@ -48,9 +49,10 @@ void	calcul_coord_dest(t_coord *c)
 	c->dx = abs(c->iso_x - c->dest2_x);
 	c->dy = abs(c->iso_y - c->dest2_y);
 }
+
 void	draw_map(void *param)
 {
-	t_coord *c;
+	t_coord	*c;
 
 	c = (t_coord *)param;
 	redraw_map(c->img);

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 09:31:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 13:36:22 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:44:46 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	isometric_projection1(int i, int j, int z, t_coord *c)
 {
-	double		scale;
+	double	scale;
 	double	calc_x;
 	double	calc_y;
 	double	height_scale;
@@ -24,7 +24,7 @@ void	isometric_projection1(int i, int j, int z, t_coord *c)
 	c->z = c->z * height_scale;
 	c->iso_x = (j - i) * scale;
 	c->iso_y = (j + i) * scale;
-	rotate_z(&c->iso_x, &c->iso_y ,c);
+	rotate_z(&c->iso_x, &c->iso_y, c);
 	rotate_y(&c->iso_x, &c->z, c);
 	rotate_x(&c->iso_y, &c->z, c);
 	c->iso_x = c->iso_x + c->x_offset;
@@ -33,7 +33,7 @@ void	isometric_projection1(int i, int j, int z, t_coord *c)
 
 void	isometric_projection2(int i, int j, int z, t_coord *c)
 {
-	double		scale;
+	double	scale;
 	double	calc_x;
 	double	calc_y;
 	double	height_scale;
@@ -43,7 +43,7 @@ void	isometric_projection2(int i, int j, int z, t_coord *c)
 	c->z = c->z * height_scale;
 	c->dest_x = (j - i) * scale;
 	c->dest_y = (j + i) * scale;
-	rotate_z(&c->dest_x, &c->dest_y ,c);
+	rotate_z(&c->dest_x, &c->dest_y, c);
 	rotate_y(&c->dest_x, &c->z, c);
 	rotate_x(&c->dest_y, &c->z, c);
 	c->dest_x = c->dest_x + c->x_offset;
@@ -52,7 +52,7 @@ void	isometric_projection2(int i, int j, int z, t_coord *c)
 
 void	isometric_projection3(int i, int j, int z, t_coord *c)
 {
-	double		scale;
+	double	scale;
 	double	calc_x;
 	double	calc_y;
 	double	height_scale;
@@ -62,7 +62,7 @@ void	isometric_projection3(int i, int j, int z, t_coord *c)
 	c->z = c->z * height_scale;
 	c->dest2_x = (j - i) * scale;
 	c->dest2_y = (j + i) * scale;
-	rotate_z(&c->dest2_x, &c->dest2_y ,c);
+	rotate_z(&c->dest2_x, &c->dest2_y, c);
 	rotate_y(&c->dest2_x, &c->z, c);
 	rotate_x(&c->dest2_y, &c->z, c);
 	c->dest2_x = c->dest2_x + c->x_offset;
@@ -99,7 +99,7 @@ void	line_algorithm(t_coord c, int x2, int y2, mlx_image_t *img)
 
 void	line_slope_bigger(t_coord c, int x2, int y2, mlx_image_t *img)
 {
-	int pixel;
+	int	pixel;
 
 	c.dx = abs(x2 - c.iso_x);
 	c.dy = abs(y2 - c.iso_y);

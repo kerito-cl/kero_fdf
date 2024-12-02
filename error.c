@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:37:19 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 14:19:48 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:47:03 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_error(char *map)
 
 	fd = open(map, O_RDONLY);
 	if (fd == -1)
-		return(0);
+		return (0);
 	line = get_next_line(fd);
 	split = ft_split(line, ' ');
 	while (split[j])

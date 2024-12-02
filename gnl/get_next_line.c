@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:59:10 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/22 12:33:12 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:10:56 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ char	*check_when_nl(char *temp, t_myitems *mystruct, int hold)
 	if (mystruct->i == 0)
 		temp = ft_strjoin(temp, mystruct->buffer, mystruct->j + 1);
 	else
-		temp = ft_strjoin(temp, mystruct->buffer + hold, mystruct->j - hold + 1);
+		temp = ft_strjoin(temp, mystruct->buffer + hold, mystruct->j - hold
+				+ 1);
 	mystruct->j = mystruct->j + 1;
 	mystruct->i = 1;
 	return (temp);
@@ -49,7 +50,8 @@ char	*read_line(int fd, char *temp, t_myitems *mystruct)
 		{
 			mystruct->j = 0;
 			mystruct->k = read(fd, mystruct->buffer, BUFFER_SIZE);
-			if (hold > 0 && mystruct->k == 0 && mystruct->i != 1 && temp[0] != '\0')
+			if (hold > 0 && mystruct->k == 0 && mystruct->i != 1
+				&& temp[0] != '\0')
 				return (temp);
 		}
 		while (mystruct->j < mystruct->k)
@@ -67,8 +69,8 @@ char	*read_line(int fd, char *temp, t_myitems *mystruct)
 
 char	*get_next_line(int fd)
 {
-	char		*temp;
-	char		*line;
+	char				*temp;
+	char				*line;
 	static t_myitems	mystruct = {0, 1, 1, ""};
 
 	if (mystruct.k == 0)

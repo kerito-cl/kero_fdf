@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 13:40:49 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/30 14:13:29 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:10:03 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ void	freematrix(int **m, int count)
 	}
 	free(m);
 }
+
 void	freecolors(unsigned int **m, int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < count)

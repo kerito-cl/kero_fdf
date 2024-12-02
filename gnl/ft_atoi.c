@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:48:36 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/29 10:50:17 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:11:18 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 int	hexa(const char *str, int *i, int hold)
 {
 	*i = *i + 2;
-	while ((str[*i] >= '0' && str[*i] <= '9') ||
-		   (str[*i] >= 'a' && str[*i] <= 'f') ||
-		   (str[*i] >= 'A' && str[*i] <= 'F'))
+	while ((str[*i] >= '0' && str[*i] <= '9') || (str[*i] >= 'a'
+			&& str[*i] <= 'f') || (str[*i] >= 'A' && str[*i] <= 'F'))
 	{
 		if (str[*i] >= '0' && str[*i] <= '9')
 			hold = hold * 16 + (str[*i] - '0');
@@ -29,6 +28,7 @@ int	hexa(const char *str, int *i, int hold)
 	}
 	return (hold);
 }
+
 int	ft_atoi(const char *str)
 {
 	int		i;

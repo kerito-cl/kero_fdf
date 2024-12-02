@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 22:23:09 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 13:50:34 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "MLX42/MLX42.h"
 # include "gnl/get_next_line.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <math.h>
 # include <stdbool.h>
@@ -24,8 +25,6 @@
 
 # define WIDTH 1980
 # define HEIGHT 1080
-# define ANGLE 0.523599
-
 
 typedef struct s_matrix
 {
@@ -38,8 +37,8 @@ typedef struct s_matrix
 
 typedef struct s_coord
 {
-	mlx_t* mlx;
-	mlx_image_t* img;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
 	unsigned int	**colors;
 	int				**numbers;
 	int				total_rows;
@@ -47,7 +46,7 @@ typedef struct s_coord
 	double			alpha;
 	double			tetha;
 	double			gamma;
-	double				scale;
+	double			scale;
 	double			height_scale;
 	int				width;
 	int				height;
@@ -76,14 +75,13 @@ typedef struct s_coord
 }					t_coord;
 
 void				draw_map(void *param);
-void				isometric_projection1(int i, int j, int z, t_coord *coord);
-void				isometric_projection2(int i, int j, int z, t_coord *coord);
-void				isometric_projection3(int i, int j, int z, t_coord *coord);
-void				calcul_coord(t_coord *coord);
-void				calcul_coord_dest(t_coord *coord);
-void				line_algorithm(t_coord coord, int x2, int y2,
-						mlx_image_t *img);
-void				line_slope_bigger(t_coord coord, int x2, int y2,
+void				isometric_projection1(int i, int j, int z, t_coord *c);
+void				isometric_projection2(int i, int j, int z, t_coord *c);
+void				isometric_projection3(int i, int j, int z, t_coord *c);
+void				calcul_coord(t_coord *c);
+void				calcul_coord_dest(t_coord *c);
+void				line_algorithm(t_coord c, int x2, int y2, mlx_image_t *img);
+void				line_slope_bigger(t_coord c, int x2, int y2,
 						mlx_image_t *img);
 int					ft_isdigit(int i);
 int					close_and_read(int fd, char *map);
@@ -97,9 +95,14 @@ void				freesplit(char **strs);
 void				freecolors(unsigned int **m, int count);
 void				freematrix(int **m, int count);
 unsigned int		**color_matrix(int fd, char *map);
-void				set_color1(t_coord *coord, int row, int col);
-void				set_color2(t_coord *coord, int row, int col);
+void				set_color1(t_coord *c, int row, int col);
+void				set_color2(t_coord *c, int row, int col);
 void				putcolors(t_coord *m);
-void				rotate_z(int *x, int *y, t_coord *coord);
+void				rotate_z(int *x, int *y, t_coord *c);
+void				rotate_z(int *x, int *y, t_coord *c);
+void				rotate_y(int *x, int *z, t_coord *c);
+void				rotate_x(int *y, int *z, t_coord *c);
+int					check_error(char *map);
+void				free_all(t_coord *c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 14:20:32 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:09:30 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 unsigned int	*build_color_row(char *line)
 {
-    int	i;
-	int	j;
+	int				i;
+	int				j;
 	unsigned int	*row;
-	int	count;
-	char **split;
+	int				count;
+	char			**split;
 
 	count = count_numbers(line);
-	row = (int *)malloc(count * sizeof(int));
+	row = (unsigned int *)malloc(count * sizeof(unsigned int));
 	if (row == NULL)
 		return (NULL);
 	split = ft_split(line, ' ');
@@ -41,32 +41,32 @@ unsigned int	*build_color_row(char *line)
 	return (row);
 }
 
-unsigned int **color_matrix(int fd, char *map)
-{	
+unsigned int	**color_matrix(int fd, char *map)
+{
 	unsigned int	**matrix;
-	char *line;
-	int	i;
-	int	count;
+	char			*line;
+	int				i;
+	int				count;
 
 	i = 0;
 	count = count_rows(fd);
 	matrix = (unsigned int **)malloc(sizeof(unsigned int *) * count);
 	fd = close_and_read(fd, map);
-    while (i < count)
-    {
+	while (i < count)
+	{
 		line = get_next_line(fd);
 		matrix[i] = build_color_row(line);
 		free(line);
 		i++;
-    }
+	}
 	return (matrix);
 }
 
 void	putcolors(t_coord *m)
 {
-	int	i;
-	int	j;
-	unsigned int color;
+	int				i;
+	int				j;
+	unsigned int	color;
 
 	color = 0x009999;
 	i = 0;

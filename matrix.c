@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/11/28 09:56:58 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 13:56:29 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 int	count_numbers(char *line)
 {
-	int i;
-	int	count;
-	char **split;
+	int		i;
+	int		count;
+	char	**split;
 
 	count = 0;
 	split = ft_split(line, ' ');
 	while (split[count])
 		count++;
 	freesplit(split);
-	return	(count);
+	return (count);
 }
 
 int	*build_row(char *line)
 {
-    int	i;
-	int	j;
-	int	*row;
-	int	count;
-	char **split;
+	int		i;
+	int		j;
+	int		*row;
+	int		count;
+	char	**split;
 
 	count = count_numbers(line);
 	row = (int *)malloc(count * sizeof(int));
@@ -54,19 +54,19 @@ int	*build_row(char *line)
 	return (row);
 }
 
-int count_rows(int fd)
+int	count_rows(int fd)
 {
-	int	count;
+	int		count;
 	char	*line;
 
 	count = 0;
 	line = get_next_line(fd);
 	if (line == NULL || count_numbers(line) == 0)
 		return (0);
-	while(line != NULL)
+	while (line != NULL)
 	{
 		free(line);
-		count++;	
+		count++;
 		line = get_next_line(fd);
 		if (line != NULL && count_numbers(line) == 0)
 			return (0);
@@ -74,23 +74,23 @@ int count_rows(int fd)
 	return (count);
 }
 
-int **create_matrix(int fd, char *map)
-{	
-	int	**matrix;
-	char *line;
-	int	i;
-	int	count;
+int	**create_matrix(int fd, char *map)
+{
+	int		**matrix;
+	char	*line;
+	int		i;
+	int		count;
 
 	i = 0;
 	count = count_rows(fd);
 	matrix = (int **)malloc(sizeof(int *) * count);
 	fd = close_and_read(fd, map);
-    while (i < count)
-    {
+	while (i < count)
+	{
 		line = get_next_line(fd);
 		matrix[i] = build_row(line);
 		free(line);
 		i++;
-    }
+	}
 	return (matrix);
 }

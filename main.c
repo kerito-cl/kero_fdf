@@ -6,97 +6,120 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 22:43:09 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 14:23:21 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "ft_fdf.h"
-// Exit the program as failure.
 
-void manage_map(void* param)
+void	manage_rotation(void *param)
 {
-	t_coord *coord = (t_coord*)param;
-	// If we PRESS the 'J' key, print "Hello".
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(coord->mlx);
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_L) && coord->scale >= 1)
-	{
-		coord->scale = coord->scale - 0.1;
-		coord->height_scale = coord->height_scale - 0.1;
-	}
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_K))
-	{
-		coord->scale = coord->scale + 0.1;
-		coord->height_scale = coord->height_scale + 0.1;
-	}
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_O))
-		coord->height_scale = coord->height_scale + 0.1;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_I))
-		coord->height_scale = coord->height_scale - 0.1;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_LEFT))
-		coord->x_offset -= 4;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_RIGHT))
-		coord->x_offset += 4;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_UP))
-		coord->y_offset -= 4;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_DOWN))
-		coord->y_offset += 4;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_D))
-		coord->alpha = coord->alpha + 0.01;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_A))
-		coord->tetha = coord->tetha + 0.01;
-	if (mlx_is_key_down(coord->mlx, MLX_KEY_W))
-		coord->gamma = coord->gamma + 0.01;
+	t_coord	*c;
+
+	c = (t_coord *)param;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_D))
+		c->alpha = c->alpha + 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_A))
+		c->alpha = c->alpha - 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_W))
+		c->tetha = c->tetha + 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_S))
+		c->tetha = c->tetha - 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_Q))
+		c->gamma = c->gamma - 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_E))
+		c->gamma = c->gamma + 0.01;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT))
+		c->x_offset -= 4;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_RIGHT))
+		c->x_offset += 4;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_UP))
+		c->y_offset -= 4;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_DOWN))
+		c->y_offset += 4;
 }
 
-void	start(char *map,t_coord *coord)
+void	manage_map(void *param)
 {
-	char *line;
-	int	fd;
+	t_coord	*c;
 
-    fd = open(map, O_RDONLY);
-	coord->numbers = create_matrix(fd, map);
+	c = (t_coord *)param;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(c->mlx);
+	if (mlx_is_key_down(c->mlx, MLX_KEY_L) && c->scale >= 1)
+	{
+		c->scale = c->scale - 0.1;
+		c->height_scale = c->height_scale - 0.1;
+	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_K))
+	{
+		c->scale = c->scale + 0.1;
+		c->height_scale = c->height_scale + 0.1;
+	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_O))
+		c->height_scale = c->height_scale + 0.1;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_I))
+		c->height_scale = c->height_scale - 0.1;
+}
+
+void	set_values(t_coord *c)
+{
+	c->width = 1980;
+	c->height = 1080;
+	c->scale = c->height / c->total_cols / 2;
+	c->height_scale = c->scale;
+	c->a = 255;
+	c->alpha = 1.134;
+	c->tetha = 0;
+	c->gamma = 0;
+	c->x_offset = 1980 / 2;
+	c->y_offset = 1080 / 2;
+}
+
+void	start(char *map, t_coord *c)
+{
+	char	*line;
+	int		fd;
+
+	fd = open(map, O_RDONLY);
+	c->numbers = create_matrix(fd, map);
 	fd = close_and_read(fd, map);
-	coord->colors = color_matrix(fd, map);
+	c->colors = color_matrix(fd, map);
 	fd = close_and_read(fd, map);
 	line = get_next_line(fd);
-	coord->total_cols = count_numbers(line);
-	coord->total_rows = count_rows(fd) + 1;
-	putcolors(coord);
-	coord->scale = 1;
-	coord->height_scale = 1;
-	coord->width = 1980;
-	coord->height = 1080;
-	coord->a = 255;
-	coord->alpha = 1.134;
-	coord->tetha = 0;
-	coord->gamma = 0;
-	coord->x_offset = 1980/2;
-	coord->y_offset = 1080/2;
-	draw_map(coord);
+	c->total_cols = count_numbers(line);
+	c->total_rows = count_rows(fd) + 1;
+	set_values(c);
+	putcolors(c);
+	draw_map(c);
 	free(line);
 	close(fd);
 }
 
 int32_t	main(int arg, char **args)
 {
-	t_coord coord;
+	t_coord	c;
 
-	if (arg > 2)
-		return 0;
-	coord.mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
-	coord.img = mlx_new_image(coord.mlx, WIDTH, HEIGHT);
-	if (!coord.mlx)
-		return 0;
-	if (!coord.img || (mlx_image_to_window(coord.mlx,coord.img, 0, 0) < 0))
-		return 0;
-	start(args[1], &coord);
-	mlx_set_setting(MLX_MAXIMIZED, true);
-	mlx_loop_hook(coord.mlx, &manage_map, &coord);
-	mlx_loop_hook(coord.mlx, &draw_map, &coord);
-	mlx_loop(coord.mlx);
-	mlx_terminate(coord.mlx);
-	freecolors(coord.colors, coord.total_rows);
-	freematrix(coord.numbers, coord.total_rows);
+	if (arg != 2)
+	{
+		perror("not passing correct arguments");
+		return (0);
+	}
+	if (check_error(args[1]) == 0)
+	{
+		perror("Your map is not rectangle");
+		return (0);
+	}
+	c.mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
+	if (!c.mlx)
+		return (0);
+	c.img = mlx_new_image(c.mlx, WIDTH, HEIGHT);
+	if (!c.img || (mlx_image_to_window(c.mlx, c.img, 0, 0) < 0))
+		return (0);
+	start(args[1], &c);
+	mlx_loop_hook(c.mlx, &manage_map, &c);
+	mlx_loop_hook(c.mlx, &manage_rotation, &c);
+	mlx_loop_hook(c.mlx, &draw_map, &c);
+	mlx_loop(c.mlx);
+	free_all(&c);
 }

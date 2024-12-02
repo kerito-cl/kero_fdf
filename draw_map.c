@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:43:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 17:48:55 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 13:37:27 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	redraw_map(mlx_image_t *img)
 	while (i < HEIGHT)
 	{
 		j = 0;
-	while (j < WIDTH)
+		while (j < WIDTH)
 		{
 			mlx_put_pixel(img, j, i, 0);
 			j++;
@@ -29,49 +29,49 @@ void	redraw_map(mlx_image_t *img)
 		i++;
 	}
 }
-void	calcul_coord(t_coord *coord)
+void	calcul_coord(t_coord *c)
 {
-	coord->z = coord->numbers[coord->row_count][coord->j];
-	isometric_projection1(coord->row_count, coord->j, coord->z, coord);
-	coord->z = coord->numbers[coord->row_count][coord->j + 1];
-	isometric_projection2(coord->row_count, coord->j + 1, coord->z, coord);
-	set_color1(coord, coord->row_count, coord->j);
-	coord->dx = abs(coord->iso_x - coord->dest_x);
-	coord->dy = abs(coord->iso_y - coord->dest_y);
+	c->z = c->numbers[c->row_count][c->j];
+	isometric_projection1(c->row_count, c->j, c->z, c);
+	c->z = c->numbers[c->row_count][c->j + 1];
+	isometric_projection2(c->row_count, c->j + 1, c->z, c);
+	set_color1(c, c->row_count, c->j);
+	c->dx = abs(c->iso_x - c->dest_x);
+	c->dy = abs(c->iso_y - c->dest_y);
 }
 
-void	calcul_coord_dest(t_coord *coord)
+void	calcul_coord_dest(t_coord *c)
 {
-	coord->z = coord->numbers[coord->row_count + 1][coord->j];
-	isometric_projection3(coord->row_count + 1, coord->j, coord->z, coord);
-	set_color2(coord, coord->row_count, coord->j);
-	coord->dx = abs(coord->iso_x - coord->dest2_x);
-	coord->dy = abs(coord->iso_y - coord->dest2_y);
+	c->z = c->numbers[c->row_count + 1][c->j];
+	isometric_projection3(c->row_count + 1, c->j, c->z, c);
+	set_color2(c, c->row_count, c->j);
+	c->dx = abs(c->iso_x - c->dest2_x);
+	c->dy = abs(c->iso_y - c->dest2_y);
 }
 void	draw_map(void *param)
 {
-	t_coord	*coord;
+	t_coord *c;
 
-	coord = (t_coord *)param;
-	redraw_map(coord->img);
-	coord->row_count = 0;
-	while (coord->row_count + 1 < coord->total_rows)
+	c = (t_coord *)param;
+	redraw_map(c->img);
+	c->row_count = 0;
+	while (c->row_count + 1 < c->total_rows)
 	{
-		coord->j = 0;
-		while (coord->j + 1 < coord->total_cols)
+		c->j = 0;
+		while (c->j + 1 < c->total_cols)
 		{
-			calcul_coord(coord);
-			if (coord->dx > coord->dy)
-				line_algorithm(*coord, coord->dest_x, coord->dest_y, coord->img);
+			calcul_coord(c);
+			if (c->dx > c->dy)
+				line_algorithm(*c, c->dest_x, c->dest_y, c->img);
 			else
-				line_slope_bigger(*coord, coord->dest_x, coord->dest_y, coord->img);
-			calcul_coord_dest(coord);
-			if (coord->dx > coord->dy)
-				line_algorithm(*coord, coord->dest2_x, coord->dest2_y, coord->img);
+				line_slope_bigger(*c, c->dest_x, c->dest_y, c->img);
+			calcul_coord_dest(c);
+			if (c->dx > c->dy)
+				line_algorithm(*c, c->dest2_x, c->dest2_y, c->img);
 			else
-				line_slope_bigger(*coord, coord->dest2_x, coord->dest2_y, coord->img);
-			coord->j++;
+				line_slope_bigger(*c, c->dest2_x, c->dest2_y, c->img);
+			c->j++;
 		}
-		coord->row_count++;
+		c->row_count++;
 	}
 }

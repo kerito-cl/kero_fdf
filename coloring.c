@@ -6,78 +6,79 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 11:07:23 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/01 14:17:47 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/02 13:35:54 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-void	bitwise_op1(t_coord *coord, int row, int col)
+void	bitwise_op1(t_coord *c, int row, int col)
 {
-	if (coord->colors[row][col] <= 0XFF)
+	if (c->colors[row][col] <= 0XFF)
 	{
-		coord->r1 = 0;
-		coord->g1 = 0;
-		coord->b1 = (coord->colors[row][col]) & 0xFF;
+		c->r1 = 0;
+		c->g1 = 0;
+		c->b1 = (c->colors[row][col]) & 0xFF;
 	}
-	else if (coord->colors[row][col] <= 0XFFFF)
+	else if (c->colors[row][col] <= 0XFFFF)
 	{
-		coord->r1 = 0;
-		coord->g1 = (coord->colors[row][col] >> 8) & 0xFF;
-		coord->b1 = (coord->colors[row][col]) & 0xFF;
+		c->r1 = 0;
+		c->g1 = (c->colors[row][col] >> 8) & 0xFF;
+		c->b1 = (c->colors[row][col]) & 0xFF;
 	}
-	else if (coord->colors[row][col] <= 0XFFFFFF)
+	else if (c->colors[row][col] <= 0XFFFFFF)
 	{
-		coord->r1 = (coord->colors[row][col] >> 16) & 0xFF;
-		coord->g1 = (coord->colors[row][col] >> 8) & 0xFF;
-		coord->b1 = (coord->colors[row][col]) & 0xFF;
+		c->r1 = (c->colors[row][col] >> 16) & 0xFF;
+		c->g1 = (c->colors[row][col] >> 8) & 0xFF;
+		c->b1 = (c->colors[row][col]) & 0xFF;
 	}
 }
 
-void	bitwise_op2(t_coord *coord, int row, int col)
+void	bitwise_op2(t_coord *c, int row, int col)
 {
-	if (coord->colors[row][col] <= 0XFF)
+	if (c->colors[row][col] <= 0XFF)
 	{
-		coord->r2 = 0;
-		coord->g2 = 0;
-		coord->b2 = (coord->colors[row][col + 1]) & 0xFF;
+		c->r2 = 0;
+		c->g2 = 0;
+		c->b2 = (c->colors[row][col + 1]) & 0xFF;
 	}
-	else if (coord->colors[row][col] <= 0XFFFF)
+	else if (c->colors[row][col] <= 0XFFFF)
 	{
-		coord->r2 = 0;
-		coord->g2 = (coord->colors[row][col] >> 8) & 0xFF;
-		coord->b2 = (coord->colors[row][col]) & 0xFF;
+		c->r2 = 0;
+		c->g2 = (c->colors[row][col] >> 8) & 0xFF;
+		c->b2 = (c->colors[row][col]) & 0xFF;
 	}
-	else if (coord->colors[row][col + 1] <= 0XFFFFFF)
+	else if (c->colors[row][col + 1] <= 0XFFFFFF)
 	{
-		coord->r2 = (coord->colors[row][col] >> 16) & 0xFF;
-		coord->g2 = (coord->colors[row][col] >> 8) & 0xFF;
-		coord->b2 = (coord->colors[row][col]) & 0xFF;
+		c->r2 = (c->colors[row][col] >> 16) & 0xFF;
+		c->g2 = (c->colors[row][col] >> 8) & 0xFF;
+		c->b2 = (c->colors[row][col]) & 0xFF;
 	}
 }
-void	set_color2(t_coord *coord, int row, int col)
+
+void	set_color2(t_coord *c, int row, int col)
 {
 	unsigned int	r;
 	unsigned int	g;
 	unsigned int	b;
 
-	bitwise_op2(coord, row + 1, col);
-	r = coord->r1 + (coord->r2 - coord->r1) * 0.5;
-	g = coord->g1 + (coord->g2 - coord->g1) * 0.5;
-	b = coord->b1 + (coord->b2 - coord->b1) * 0.5;
-	coord->final_color = (r << 24) + (g << 16) + (b << 8) + coord->a;
+	bitwise_op2(c, row + 1, col);
+	r = c->r1 + (c->r2 - c->r1) * 0.5;
+	g = c->g1 + (c->g2 - c->g1) * 0.5;
+	b = c->b1 + (c->b2 - c->b1) * 0.5;
+	c->final_color = (r << 24) + (g << 16) + (b << 8) + c->a;
 }
 
-void	set_color1(t_coord *coord, int row, int col)
+void	set_color1(t_coord *c, int row, int col)
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
 
-	bitwise_op1(coord, row, col);
-	bitwise_op2(coord, row, col + 1);
-	r = coord->r1 + (coord->r2 - coord->r1) * 0.5;
-	g = coord->g1 + (coord->g2 - coord->g1) * 0.5;
-	b = coord->b1 + (coord->b2 - coord->b1) * 0.5;
-	coord->final_color = (r << 24) + (g << 16) + (b << 8) + coord->a;
+	bitwise_op1(c, row, col);
+	bitwise_op2(c, row, col + 1);
+	r = c->r1 + (c->r2 - c->r1) * 0.5;
+	g = c->g1 + (c->g2 - c->g1) * 0.5;
+	b = c->b1 + (c->b2 - c->b1) * 0.5;
+	c->final_color = (r << 24) + (g << 16) + (b << 8) + c->a;
 }

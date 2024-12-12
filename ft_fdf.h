@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 13:50:34 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 11:51:37 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ typedef struct s_coord
 }					t_coord;
 
 void				draw_map(void *param);
-void				isometric_projection1(int i, int j, int z, t_coord *c);
-void				isometric_projection2(int i, int j, int z, t_coord *c);
-void				isometric_projection3(int i, int j, int z, t_coord *c);
+void				isometric_projection1(int i, int j, t_coord *c);
+void				isometric_projection2(int i, int j, t_coord *c);
+void				isometric_projection3(int i, int j, t_coord *c);
 void				calcul_coord(t_coord *c);
 void				calcul_coord_dest(t_coord *c);
 void				line_algorithm(t_coord c, int x2, int y2, mlx_image_t *img);

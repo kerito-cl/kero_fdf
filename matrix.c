@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 13:56:29 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 11:52:50 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	count_numbers(char *line)
 {
-	int		i;
 	int		count;
 	char	**split;
 
@@ -84,11 +83,18 @@ int	**create_matrix(int fd, char *map)
 	i = 0;
 	count = count_rows(fd);
 	matrix = (int **)malloc(sizeof(int *) * count);
+	if (matrix == NULL)
+		return (NULL);
 	fd = close_and_read(fd, map);
 	while (i < count)
 	{
 		line = get_next_line(fd);
 		matrix[i] = build_row(line);
+		if (matrix[i] == NULL)
+		{
+			freematrix(matrix, i);
+			return (NULL);
+		}
 		free(line);
 		i++;
 	}

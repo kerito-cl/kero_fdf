@@ -6,17 +6,15 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 09:31:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 14:44:46 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 11:57:46 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-void	isometric_projection1(int i, int j, int z, t_coord *c)
+void	isometric_projection1(int i, int j, t_coord *c)
 {
 	double	scale;
-	double	calc_x;
-	double	calc_y;
 	double	height_scale;
 
 	scale = c->scale;
@@ -31,11 +29,9 @@ void	isometric_projection1(int i, int j, int z, t_coord *c)
 	c->iso_y = c->iso_y + c->y_offset;
 }
 
-void	isometric_projection2(int i, int j, int z, t_coord *c)
+void	isometric_projection2(int i, int j, t_coord *c)
 {
 	double	scale;
-	double	calc_x;
-	double	calc_y;
 	double	height_scale;
 
 	scale = c->scale;
@@ -50,11 +46,9 @@ void	isometric_projection2(int i, int j, int z, t_coord *c)
 	c->dest_y = c->dest_y + c->y_offset;
 }
 
-void	isometric_projection3(int i, int j, int z, t_coord *c)
+void	isometric_projection3(int i, int j, t_coord *c)
 {
 	double	scale;
-	double	calc_x;
-	double	calc_y;
 	double	height_scale;
 
 	scale = c->scale;
@@ -78,7 +72,8 @@ void	line_algorithm(t_coord c, int x2, int y2, mlx_image_t *img)
 	pixel = (2 * c.dy) - c.dx;
 	while (c.iso_x < x2 || c.iso_x > x2)
 	{
-		if ((unsigned int)c.iso_x < c.width && (unsigned int)c.iso_y < c.height)
+		if ((uint64_t)c.iso_x < (uint64_t)c.width
+			&& (uint64_t)c.iso_y < (uint64_t)c.height)
 			mlx_put_pixel(img, c.iso_x, c.iso_y, c.final_color);
 		if (c.iso_x < x2)
 			c.iso_x = c.iso_x + 1;
@@ -106,7 +101,8 @@ void	line_slope_bigger(t_coord c, int x2, int y2, mlx_image_t *img)
 	pixel = (2 * c.dx) - c.dy;
 	while (c.iso_y < y2 || c.iso_y > y2)
 	{
-		if ((unsigned int)c.iso_x < c.width && (unsigned int)c.iso_y < c.height)
+		if ((uint64_t)c.iso_x < (uint64_t)c.width
+			&& (uint64_t)c.iso_y < (uint64_t)c.height)
 			mlx_put_pixel(img, c.iso_x, c.iso_y, c.final_color);
 		if (c.iso_y < y2)
 			c.iso_y = c.iso_y + 1;

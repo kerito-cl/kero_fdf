@@ -6,11 +6,12 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/02 14:23:21 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 14:48:24 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
+#include <string.h>
 
 void	manage_rotation(void *param)
 {
@@ -82,11 +83,20 @@ void	start(char *map, t_coord *c)
 	int		fd;
 
 	fd = open(map, O_RDONLY);
+	if (fd == -1)
+		exit(0);
 	c->numbers = create_matrix(fd, map);
 	fd = close_and_read(fd, map);
 	c->colors = color_matrix(fd, map);
 	fd = close_and_read(fd, map);
+	if (c->numbers == NULL || c->colors == NULL)
+		exit(1);
 	line = get_next_line(fd);
+	if (line == NULL)
+	{
+		free_all(c);
+		exit(0);
+	}
 	c->total_cols = count_numbers(line);
 	c->total_rows = count_rows(fd) + 1;
 	set_values(c);
@@ -107,7 +117,7 @@ int32_t	main(int arg, char **args)
 	}
 	if (check_error(args[1]) == 0)
 	{
-		perror("Your map is not rectangle");
+		perror("Your map doesn't exist");
 		return (0);
 	}
 	c.mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);

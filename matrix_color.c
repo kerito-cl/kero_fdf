@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/05 08:28:04 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/13 08:53:05 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ unsigned int	**color_matrix(int fd, char *map)
 	i = 0;
 	count = count_rows(fd);
 	matrix = (unsigned int **)malloc(sizeof(unsigned int *) * count);
-	if (matrix == NULL)
+	if (matrix == NULL || count == 0)
 		return (NULL);
 	fd = close_and_read(fd, map);
 	while (i < count)

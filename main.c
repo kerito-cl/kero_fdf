@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 14:48:24 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/13 11:20:17 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,18 @@ void	start(char *map, t_coord *c)
 
 	fd = open(map, O_RDONLY);
 	if (fd == -1)
-		exit(0);
+		free_all(c);
 	c->numbers = create_matrix(fd, map);
+	if (c->numbers == NULL)
+		free_all(c);
 	fd = close_and_read(fd, map);
 	c->colors = color_matrix(fd, map);
+	if (c->numbers == NULL)
+		free_all(c);
 	fd = close_and_read(fd, map);
-	if (c->numbers == NULL || c->colors == NULL)
-		exit(1);
 	line = get_next_line(fd);
 	if (line == NULL)
-	{
 		free_all(c);
-		exit(0);
-	}
 	c->total_cols = count_numbers(line);
 	c->total_rows = count_rows(fd) + 1;
 	set_values(c);
@@ -110,16 +109,17 @@ int32_t	main(int arg, char **args)
 {
 	t_coord	c;
 
-	if (arg != 2)
+	ft_bzero(&c, sizeof(t_coord));
+	if (arg != 2 || check_if_fdf(args[1]) == 0)
+		throw_error(0);
+	c.fd_folder = open(args[1], O_DIRECTORY);
+	if (c.fd_folder != -1)
 	{
-		perror("not passing correct arguments");
-		return (0);
+		close(c.fd_folder);
+		throw_error(0);
 	}
 	if (check_error(args[1]) == 0)
-	{
-		perror("Your map doesn't exist");
-		return (0);
-	}
+		throw_error(0);
 	c.mlx = mlx_init(WIDTH, HEIGHT, "Kero FDF", true);
 	if (!c.mlx)
 		return (0);

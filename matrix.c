@@ -6,11 +6,22 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 11:52:50 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/13 13:57:43 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
+
+int	set_max_n(t_coord *s, int i)
+{
+	if (s->set_max == 0)
+		s->set_max = i;
+	else if (s->set_max < i)
+	{
+		s->set_max = i;
+	}
+	else if (s->set_min < i)
+}
 
 int	count_numbers(char *line)
 {
@@ -19,6 +30,8 @@ int	count_numbers(char *line)
 
 	count = 0;
 	split = ft_split(line, ' ');
+	if (split == NULL)
+		return (0);
 	while (split[count])
 		count++;
 	freesplit(split);
@@ -83,7 +96,7 @@ int	**create_matrix(int fd, char *map)
 	i = 0;
 	count = count_rows(fd);
 	matrix = (int **)malloc(sizeof(int *) * count);
-	if (matrix == NULL)
+	if (matrix == NULL || count == 0)
 		return (NULL);
 	fd = close_and_read(fd, map);
 	while (i < count)

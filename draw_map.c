@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:43:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 14:58:41 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:54:30 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	close_map_line(t_coord *c)
 {
 	if (c->j > 0)
 	{
-			calcul_coord(c);
-			calcul_coord_dest(c);
+		calcul_coord(c);
+		calcul_coord_dest(c);
 		if (c->dx > c->dy)
 			line_algorithm(*c, c->dest2_x, c->dest2_y, c->img);
 		else

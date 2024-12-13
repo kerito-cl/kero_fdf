@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 11:51:37 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/13 11:56:10 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ typedef struct s_coord
 	int				j;
 	int				x_offset;
 	int				y_offset;
+	int				set_max;
+	int				set_min;
+	int				fd_folder;
 }					t_coord;
 
 void				draw_map(void *param);
@@ -104,5 +107,7 @@ void				rotate_y(int *x, int *z, t_coord *c);
 void				rotate_x(int *y, int *z, t_coord *c);
 int					check_error(char *map);
 void				free_all(t_coord *c);
+void				throw_error(int flag);
+int					check_if_fdf(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 09:31:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 11:57:46 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 10:12:29 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	isometric_projection1(int i, int j, t_coord *c)
 	double	height_scale;
 
 	scale = c->scale;
-	height_scale = c->height_scale;
+	height_scale = c->height_scale / 2;
 	c->z = c->z * height_scale;
 	c->iso_x = (j - i) * scale;
 	c->iso_y = (j + i) * scale;
@@ -36,7 +36,7 @@ void	isometric_projection2(int i, int j, t_coord *c)
 
 	scale = c->scale;
 	height_scale = c->height_scale;
-	c->z = c->z * height_scale;
+	c->z = c->z * height_scale / 2;
 	c->dest_x = (j - i) * scale;
 	c->dest_y = (j + i) * scale;
 	rotate_z(&c->dest_x, &c->dest_y, c);
@@ -53,7 +53,7 @@ void	isometric_projection3(int i, int j, t_coord *c)
 
 	scale = c->scale;
 	height_scale = c->height_scale;
-	c->z = c->z * height_scale;
+	c->z = c->z * height_scale / 2;
 	c->dest2_x = (j - i) * scale;
 	c->dest2_y = (j + i) * scale;
 	rotate_z(&c->dest2_x, &c->dest2_y, c);

@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/13 11:56:10 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 13:42:04 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char				**ft_split(char const *s, char c);
 void				freesplit(char **strs);
 void				freecolors(unsigned int **m, int count);
 void				freematrix(int **m, int count);
-unsigned int		**color_matrix(int fd, char *map);
+unsigned int		**color_matrix(int fd, char *map, int cols);
 void				set_color1(t_coord *c, int row, int col);
 void				set_color2(t_coord *c, int row, int col);
 void				putcolors(t_coord *m);
@@ -109,5 +109,8 @@ int					check_error(char *map);
 void				free_all(t_coord *c);
 void				throw_error(int flag);
 int					check_if_fdf(char *str);
+void				find_min_max(t_coord *c, int rows, int cols);
+bool				has_values_greater_than_150(t_coord *c, int rows, int cols);
+void				rescale_grid(t_coord *c, int rows, int cols);
 
 #endif

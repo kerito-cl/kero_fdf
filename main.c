@@ -6,12 +6,11 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/13 11:20:17 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 13:03:39 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
-#include <string.h>
 
 void	manage_rotation(void *param)
 {
@@ -89,19 +88,20 @@ void	start(char *map, t_coord *c)
 	if (c->numbers == NULL)
 		free_all(c);
 	fd = close_and_read(fd, map);
-	c->colors = color_matrix(fd, map);
-	if (c->numbers == NULL)
-		free_all(c);
-	fd = close_and_read(fd, map);
 	line = get_next_line(fd);
 	if (line == NULL)
 		free_all(c);
 	c->total_cols = count_numbers(line);
 	c->total_rows = count_rows(fd) + 1;
+	free(line);
+	rescale_grid(c, c->total_rows, c->total_cols);
+	fd = close_and_read(fd, map);
+	c->colors = color_matrix(fd, map, c->total_cols);
+	if (c->numbers == NULL)
+		free_all(c);
 	set_values(c);
 	putcolors(c);
 	draw_map(c);
-	free(line);
 	close(fd);
 }
 

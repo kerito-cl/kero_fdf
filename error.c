@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:37:19 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/13 08:49:41 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 13:45:41 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ void	throw_error(int flag)
 
 int	check_if_fdf(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '.' && str[i + 1] == 'f' && str[i + 2] == 'd' && str[i
-			+ 3] == 'f')
+		if (str[i] == '.' && str[i + 1] == 'f' && str[i + 2] == 'd'
+			&& str[i + 3] == 'f')
 			return (1);
 		i++;
 	}

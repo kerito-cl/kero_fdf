@@ -6,13 +6,13 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/13 13:57:43 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 12:35:48 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-int	set_max_n(t_coord *s, int i)
+/*int	set_max_n(t_coord *s, int i)
 {
 	if (s->set_max == 0)
 		s->set_max = i;
@@ -21,7 +21,7 @@ int	set_max_n(t_coord *s, int i)
 		s->set_max = i;
 	}
 	else if (s->set_min < i)
-}
+}*/
 
 int	count_numbers(char *line)
 {

@@ -6,22 +6,20 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/13 08:53:05 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/14 13:40:56 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-unsigned int	*build_color_row(char *line)
+unsigned int	*build_color_row(char *line, int count)
 {
 	int				i;
 	int				j;
 	unsigned int	*row;
-	int				count;
 	char			**split;
 
-	count = count_numbers(line);
-	row = (unsigned int *)malloc(count * sizeof(unsigned int));
+	row = (unsigned int *)ft_calloc((count + 1), sizeof(unsigned int));
 	if (row == NULL)
 		return (NULL);
 	split = ft_split(line, ' ');
@@ -41,7 +39,7 @@ unsigned int	*build_color_row(char *line)
 	return (row);
 }
 
-unsigned int	**color_matrix(int fd, char *map)
+unsigned int	**color_matrix(int fd, char *map, int cols)
 {
 	unsigned int	**matrix;
 	char			*line;
@@ -57,7 +55,7 @@ unsigned int	**color_matrix(int fd, char *map)
 	while (i < count)
 	{
 		line = get_next_line(fd);
-		matrix[i] = build_color_row(line);
+		matrix[i] = build_color_row(line, cols);
 		if (matrix[i] == NULL)
 		{
 			freecolors(matrix, i);
@@ -85,7 +83,7 @@ void	putcolors(t_coord *m)
 			if (m->numbers[i][j] < 0 && m->colors[i][j] == color)
 				m->colors[i][j] = color - (10 * m->numbers[i][j]);
 			else if (m->numbers[i][j] > 0 && m->colors[i][j] == color)
-				m->colors[i][j] = color * (20 * m->numbers[i][j]);
+				m->colors[i][j] = color * (10 * m->numbers[i][j]);
 			j++;
 		}
 		i++;

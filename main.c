@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/15 17:25:55 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/15 20:34:08 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,12 @@ void	set_values(t_coord *c)
 {
 	c->width = 1980;
 	c->height = 1080;
-	c->scale = c->height / c->total_cols / 2;
+	if (c->total_cols > 50)
+		c->scale = c->height / c->total_cols / 2;
+	else if (c->set_max > 30)
+		c->scale = c->height / c->set_max / 2;
+	else
+		c->scale = c->height / c->total_cols / 2;
 	c->height_scale = c->scale;
 	c->a = 255;
 	c->alpha = 1.134;

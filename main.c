@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 18:33:57 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/14 13:03:39 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/15 17:25:55 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ void	manage_map(void *param)
 		c->height_scale = c->height_scale + 0.1;
 	if (mlx_is_key_down(c->mlx, MLX_KEY_I))
 		c->height_scale = c->height_scale - 0.1;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_P))
+	{
+		c->alpha = 0;
+		c->gamma = 0;
+		c->tetha = 0;
+	}
 }
 
 void	set_values(t_coord *c)

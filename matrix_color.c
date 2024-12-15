@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/14 13:40:56 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/15 12:20:15 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,12 @@ void	putcolors(t_coord *m)
 		{
 			if (m->numbers[i][j] < 0 && m->colors[i][j] == color)
 				m->colors[i][j] = color - (10 * m->numbers[i][j]);
-			else if (m->numbers[i][j] > 0 && m->colors[i][j] == color)
+			else if (m->numbers[i][j] > 0 && m->colors[i][j] == color
+				&& m->set_max <= 20)
 				m->colors[i][j] = color * (10 * m->numbers[i][j]);
+			else if (m->numbers[i][j] > 0 && m->colors[i][j] == color
+				&& m->set_max > 20)
+				m->colors[i][j] = color * (5 * m->numbers[i][j]);
 			j++;
 		}
 		i++;

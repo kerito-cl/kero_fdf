@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 11:28:22 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/14 13:04:16 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/15 12:14:37 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void	rescale_grid(t_coord *c, int rows, int cols)
 	new_max = 20;
 	new_min = 0;
 	i = 0;
+	find_min_max(c, rows, cols);
 	if (has_values_greater_than_350(c, rows, cols))
 	{
-		find_min_max(c, rows, cols);
 		while (i < rows)
 		{
 			j = 0;

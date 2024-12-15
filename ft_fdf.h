@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:00:09 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/14 13:42:04 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/15 12:00:27 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void				free_all(t_coord *c);
 void				throw_error(int flag);
 int					check_if_fdf(char *str);
 void				find_min_max(t_coord *c, int rows, int cols);
-bool				has_values_greater_than_150(t_coord *c, int rows, int cols);
 void				rescale_grid(t_coord *c, int rows, int cols);
 
 #endif
